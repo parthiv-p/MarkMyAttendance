@@ -52,7 +52,7 @@ public class FingerprintActivity extends AppCompatActivity {
         if(!fingerprintManager.isHardwareDetected()){
             Intent intent = new Intent(this, HomeActivity.class); //bypass to main screen
             startActivity(intent);
-            finish();                           //this kills the activity forever hence user cannot return from next activity
+            finish();            //this kills the activity forever hence user cannot return from next activity
         }else {
             // Checks whether fingerprint permission is set on manifest
             if (ActivityCompat.checkSelfPermission(this, Manifest.permission.USE_FINGERPRINT) != PackageManager.PERMISSION_GRANTED) {

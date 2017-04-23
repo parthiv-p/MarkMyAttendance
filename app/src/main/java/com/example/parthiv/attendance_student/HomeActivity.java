@@ -1,15 +1,7 @@
-//#TODO: Test with low power advertising
-//#TODO: how to see if user has switched on permission for the app
-//#TODO: ID SECURE
-
-
 package com.example.parthiv.attendance_student;
 
 import android.graphics.Color;
 import android.os.AsyncTask;
-import android.os.ParcelUuid;
-import android.os.Parcelable;
-import android.provider.Settings;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -32,16 +24,10 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
-import java.nio.charset.Charset;
-import java.nio.charset.StandardCharsets;
-import java.util.UUID;
-
 import static android.bluetooth.le.AdvertiseSettings.ADVERTISE_MODE_BALANCED;
 import static android.bluetooth.le.AdvertiseSettings.ADVERTISE_MODE_LOW_POWER;
 import static android.bluetooth.le.AdvertiseSettings.ADVERTISE_TX_POWER_MEDIUM;
 import static android.bluetooth.le.AdvertiseSettings.ADVERTISE_TX_POWER_ULTRA_LOW;
-import static java.security.AccessController.getContext;
-
 
 public class HomeActivity extends AppCompatActivity {
 
@@ -59,8 +45,6 @@ public class HomeActivity extends AppCompatActivity {
 
     private static final String TAG = HomeActivity.class.getSimpleName();
 
-   // private final static String BASE_UUID = "00000000";  //https://www.bluetooth.com/specifications/assigned-numbers/service-discovery
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -76,20 +60,7 @@ public class HomeActivity extends AppCompatActivity {
         mBluetoothAdapter = mBluetoothManager.getAdapter();
 
         manager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-
-
     }
-/*
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-
-        if(requestCode == REQUEST_ENABLE_BT) {
-            if(resultCode == RESULT_OK){
-                attendanceButton.setEnabled(true);
-            }
-        }
-    }*/
 
     @Override
     protected void onStart() {
@@ -161,27 +132,24 @@ public class HomeActivity extends AppCompatActivity {
             mBluetoothLeAdvertiser = mBluetoothAdapter.getBluetoothLeAdvertiser();
             if (mBluetoothLeAdvertiser != null) {
 
-                    AdvertiseSettings mAdvSettings = new AdvertiseSettings.Builder()
-                        .setAdvertiseMode(ADVERTISE_MODE_LOW_POWER)
-                        .setTxPowerLevel(ADVERTISE_TX_POWER_ULTRA_LOW)
-                        .setTimeout(10000)
-                        .build();
+                AdvertiseSettings mAdvSettings = new AdvertiseSettings.Builder()
+                    .setAdvertiseMode(ADVERTISE_MODE_LOW_POWER)
+                    .setTxPowerLevel(ADVERTISE_TX_POWER_ULTRA_LOW)
+                    .setTimeout(10000)
+                    .build();
+                byte[] manufactureData = new byte[] {(byte) 0x39, (byte)0x00, (byte)0x13, (byte) 0x01, (byte) 0x00, (byte) 0x06};
 
-                    //ParcelUuid serviceDataUuid = ParcelUuid.fromString(BASE_UUID);
-                    //Log.e(TAG, serviceDataUuid.toString());
-                    byte[] manufactureData = new byte[] {(byte) 0x39, (byte)0x00, (byte)0x13, (byte) 0x01, (byte) 0x00, (byte) 0x06};
+                int manufacturerId = 0x0000;
+                //#TODO: Send android ID instead of hard coded manufacture data in the BLE packet
+                //String android_id = Settings.Secure.getString(this.getContentResolver(), Settings.Secure.ANDROID_ID);
+                //Log.e(TAG, android_id);
+                //byte[] android_id_byte = android_id.getBytes(StandardCharsets.UTF_8);
 
-                    int manufacturerId = 0x0000;
+                AdvertiseData mAdvData = new AdvertiseData.Builder()
+                    .addManufacturerData(manufacturerId, manufactureData)
+                    .build();
 
-                    //String android_id = Settings.Secure.getString(this.getContentResolver(), Settings.Secure.ANDROID_ID);
-                    //Log.e(TAG, android_id);
-                    //byte[] android_id_byte = android_id.getBytes(StandardCharsets.UTF_8);
-
-                    AdvertiseData mAdvData = new AdvertiseData.Builder()
-                        .addManufacturerData(manufacturerId, manufactureData)
-                        .build();
-
-                    mBluetoothLeAdvertiser.startAdvertising(mAdvSettings, mAdvData, mAdvCallback);
+                mBluetoothLeAdvertiser.startAdvertising(mAdvSettings, mAdvData, mAdvCallback);
             } else {
                 Toast.makeText(this, R.string.ble_adv_error, Toast.LENGTH_SHORT).show();
                 attendanceButton.setTextColor(getColor(R.color.errorText));
