@@ -1,0 +1,19 @@
+<resources>
+    <string name="app_name">Attendance</string>
+    <string name="title_fingerprint_text">Verify Identity to Mark Attendance</string>
+    <string name="bottom_fingerprint_text">Place your fingertip over the sensor to verify your identity</string>
+    <string name="fingerprint_auth_error">Fingerprint authentication permission not enabled</string>
+    <string name="fingerprint_reg_error">Register at least one fingerprint in Settings</string>
+    <string name="fingerprint_lockscreen_error">Lock screen security not enabled in Settings</string>
+    <string name="fingerprint_authentication_error">Error Authenticating Fingerprint!</string>
+    <string name="fingerprint_success">Verification Successful!</string>
+
+
+    <string name="attendance_button">Mark Attendance</string>
+    <string name="BLE_not_supported">BLE Advertising not supported on this device</string>
+    <string name="advertise_failure">Advertising Failure</string>
+    <string name="ble_adv_error">BLE Advertising is not supported on this device</string>
+    <string name="permission_error">Please check if Locations Services and Bluetooth are enabled!</string>
+    <string name="attendance_success">Attendance Marked Succesfully!</string>
+
+</resources>
